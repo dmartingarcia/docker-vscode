@@ -1,0 +1,30 @@
+version: '3.6'
+
+services:
+  vscode:
+    container_name: vscode
+    image: linuxserver/code-server
+    volumes:
+      - ./vscode/config:/config
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: Europe/Madrid
+      PASSWORD: "${VSCODE_PASSWORD}"
+    ports:
+      - 8443:8443
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.vscode.rule=Host(`vscode.${HTTP_HOST}`)"
+      - "traefik.http.routers.vscode.tls=true"
+      - "traefik.http.routers.vscode.entrypoints=websecure"
+      - "traefik.http.routers.vscode.middlewares=simpleauth@file"
+      - "traefik.http.routers.vscode.tls.certresolver=lets-encrypt"
+      - "traefik.port=8443"
+    networks:
+      - web
+
+networks:
+  web:
+    external: true
