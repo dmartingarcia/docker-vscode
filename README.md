@@ -8,7 +8,7 @@ In this case, it contains a self-efficient *VisualStudioCode* setup.
 
 ```
 cp .env.example .env
-docker-compose up -d
+docker compose up -d
 ```
 
 And browse into `http://localhost:8443 in order to see the `VisualStudioCode` window.

@@ -6,11 +6,11 @@ services:
     image: linuxserver/code-server
     volumes:
       - ./vscode/config:/config
+      - /home/$USER/own:/workspace
     environment:
       PUID: 1000
       PGID: 1000
       TZ: Europe/Madrid
-      PASSWORD: "${VSCODE_PASSWORD}"
     ports:
       - 8443:8443
     restart: unless-stopped
@@ -19,7 +19,7 @@ services:
       - "traefik.http.routers.vscode.rule=Host(`vscode.${HTTP_HOST}`)"
       - "traefik.http.routers.vscode.tls=true"
       - "traefik.http.routers.vscode.entrypoints=websecure"
-      - "traefik.http.routers.vscode.middlewares=simpleauth@file"
+      - "traefik.http.routers.vscode.middlewares=authelia@docker"
       - "traefik.http.routers.vscode.tls.certresolver=lets-encrypt"
       - "traefik.port=8443"
     networks:
